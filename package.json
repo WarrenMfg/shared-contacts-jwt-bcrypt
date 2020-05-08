@@ -1,5 +1,5 @@
 {
-  "name": "node-jwt-bcrypt-authentication",
+  "name": "shared-contacts-jwt-bcrypt",
   "version": "1.0.0",
   "description": "",
   "main": "backend/server/index.js",
