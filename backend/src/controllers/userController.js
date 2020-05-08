@@ -32,18 +32,21 @@ export const register = (req, res) => {
 };
 
 
-export const login = (req, res) => {
-  User.findOne({ userName: req.body.userName })
-    .then(user => {
-      if (!user) {
+export const login = async (req, res) => {
+  try {
+    const user = await User.findOne({ userName: req.body.userName });
+
+    if (!user) {
+      res.status(401).json({ message: 'Authentication failed. Wrong user name or password.' });
+    } else {
+      if (!user.comparePassword(req.body.password, user.hashPassword)) {
         res.status(401).json({ message: 'Authentication failed. Wrong user name or password.' });
-      } else if (user) {
-        if (!user.comparePassword(req.body.password, user.hashPassword)) {
-          res.status(401).json({ message: 'Authentication failed. Wrong user name or password.' });
-        } else {
-          res.send({ token: jwt.sign({ email: user.email, userName: user.userName, _id: user._id }, config.secret, {expiresIn: config.expiresIn}) })
-        }
+      } else {
+        res.send({ token: jwt.sign({ email: user.email, userName: user.userName, _id: user._id }, config.secret, {expiresIn: config.expiresIn}) });
       }
-    })
-    .catch(err => res.status(400).json({ message: err.message }));
+    }
+
+  } catch (e) {
+    res.status(400).json({ message: e.message })
+  }
 };

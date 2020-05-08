@@ -3,6 +3,7 @@ import routes from '../src/routes/routes.js';
 import mongoose from 'mongoose';
 import jsonwebtoken from 'jsonwebtoken';
 import config from '../utils/config';
+import morgan from 'morgan';
 
 
 const app = express();
@@ -15,6 +16,8 @@ mongoose.connect('mongodb://localhost/nodeExpress', {
   useFindAndModify: false
 });
 
+// logger
+app.use(morgan('dev'));
 // rich url-encoded format
 app.use(express.urlencoded({ extended: true }));
 // body parser

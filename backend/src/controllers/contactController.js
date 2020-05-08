@@ -4,56 +4,75 @@ import { ContactSchema } from '../models/contactModel';
 const Contact = mongoose.model('Contact', ContactSchema);
 
 // one
-export const addNewContact = (req, res) => {
-  let newContact = new Contact(req.body);
+export const addNewContact = async (req, res) => {
+  try {
+    const newContact = await Contact.create(req.body);
+    res.send(newContact);
 
-  newContact.save((err, contact) => {
-    if (err) {
-      res.send(err);
+  } catch (e) {
+    res.status(400).json({ message: e.message });
+  }
+};
+
+
+export const getContact = async (req, res) => {
+  try {
+    const contact = await Contact.findById(req.params.contactID).lean().exec();
+
+    if (!contact) {
+      res.status(400).json({ message: 'No contact found.' });
     } else {
       res.send(contact);
     }
-  });
+
+  } catch (e) {
+    res.status(400).json({ message: e.message });
+  }
 };
 
-export const getContact = (req, res) => {
-  Contact.findById(req.params.contactID, (err, contact) => {
-    if (err) {
-      res.send(err);
+
+export const updateContact = async (req, res) => {
+  try {
+    const updatedContact = await Contact.findOneAndUpdate({ _id: req.params.contactID}, req.body, { new: true }).lean().exec();
+
+    if (!updatedContact) {
+      res.status(400).json({ message: 'No contact found.' });
     } else {
-      res.send(contact);
+      res.send(updatedContact);
     }
-  });
+
+  } catch (e) {
+    res.status(400).json({ message: e.message });
+  }
 };
 
-export const updateContact = (req, res) => {
-  Contact.findOneAndUpdate({ _id: req.params.contactID}, req.body, { new: true }, (err, contact) => {
-    if (err) {
-      res.send(err);
+
+export const deleteContact = async (req, res) => {
+  try {
+    const deletedContact = await Contact.findOneAndRemove({ _id: req.params.contactID}).lean().exec();
+
+    if (!deletedContact) {
+      res.status(400).json({ message: 'No contact found.' });
     } else {
-      res.send(contact);
+      res.send(deletedContact);
     }
-  });
+
+  } catch (e) {
+    res.status(400).json({ message: e.message });
+  }
 };
 
-export const deleteContact = (req, res) => {
-  Contact.deleteOne({ _id: req.params.contactID}, (err, contact) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.sendStatus(200);
-    }
-  });
-};
+
 
 
 // many
-export const getContacts = (req, res) => {
-  Contact.find({}, (err, contact) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(contact);
-    }
-  });
+export const getContacts = async (req, res) => {
+  try {
+    const contacts = await Contact.find({}).lean().exec();
+
+    res.send(contacts);
+
+  } catch (e) {
+    res.status(400).json({ message: e.message });
+  }
 };
