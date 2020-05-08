@@ -2,6 +2,7 @@ import express from 'express';
 import routes from '../src/routes/routes.js';
 import mongoose from 'mongoose';
 import jsonwebtoken from 'jsonwebtoken';
+import config from '../utils/config';
 
 
 const app = express();
@@ -22,7 +23,7 @@ app.use(express.json());
 // JWT setup
 app.use((req, res, next) => {
   if (req?.headers?.authorization?.split(' ')[0] === 'JWT') {
-    jsonwebtoken.verify(req.headers.authorization.split(' ')[1], 'restfulAPI', (err, decode) => {
+    jsonwebtoken.verify(req.headers.authorization.split(' ')[1], config.secret, (err, decode) => {
       if (err) {
         req.user = undefined;
       }

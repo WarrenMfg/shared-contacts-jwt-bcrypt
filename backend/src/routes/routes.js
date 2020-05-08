@@ -19,9 +19,11 @@ const routes = app => {
     .post(register)
 
 
+
   // login
   app.route('/auth/login')
     .post(login)
+
 
 
   // one
@@ -34,6 +36,7 @@ const routes = app => {
     .get(getContact)
     .put(updateContact)
     .delete(deleteContact);
+
 
 
   // many
