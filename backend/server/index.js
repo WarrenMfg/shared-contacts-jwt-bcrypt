@@ -10,7 +10,7 @@ const app = express();
 const PORT = 4000;
 
 // mongoose connection
-mongoose.connect('mongodb://localhost/nodeExpress', {
+mongoose.connect(config.URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
