@@ -8,7 +8,8 @@ import {
 import {
   loginRequired,
   register,
-  login
+  login,
+  deleteUser
 } from '../controllers/userController';
 
 
@@ -36,6 +37,10 @@ const routes = app => {
     .get(getContact)
     .put(updateContact)
     .delete(deleteContact);
+
+  app.route('/user')
+    .all(loginRequired)
+    .delete(deleteUser);
 
 
 

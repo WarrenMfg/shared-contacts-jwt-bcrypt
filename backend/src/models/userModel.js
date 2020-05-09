@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+
 
 const Schema = mongoose.Schema;
 
@@ -22,10 +22,4 @@ const UserSchema = new Schema({
   }
 });
 
-export const User = mongoose.model('User', UserSchema);
-
-
-UserSchema.methods.comparePassword = (password, hashPassword) => {
-  // password from user is encrypted at this point so bcrypt can compare hash-to-hash
-  return bcrypt.compareSync(password, hashPassword);
-};
+export default mongoose.model('User', UserSchema);

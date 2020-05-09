@@ -29,9 +29,10 @@ app.use((req, res, next) => {
     jsonwebtoken.verify(req.headers.authorization.split(' ')[1], config.secret, (err, decode) => {
       if (err) {
         req.user = undefined;
+      } else {
+        // for loginRequired middleware
+        req.user = decode;
       }
-      // for loginRequired middleware
-      req.user = decode;
       next();
     });
 
