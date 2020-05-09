@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-export const ContactSchema = new Schema({
+const ContactSchema = new Schema({
   firstName: {
     type: String
   },
@@ -23,3 +23,5 @@ export const ContactSchema = new Schema({
     default: Date.now()
   }
 });
+
+export const Contact = mongoose.model('Contact', ContactSchema);

@@ -1,11 +1,8 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { UserSchema } from '../models/userModel';
+import { User } from '../models/userModel';
 import config from '../../utils/config';
-
-
-const User = mongoose.model('User', UserSchema);
 
 
 export const loginRequired = (req, res, next) => {

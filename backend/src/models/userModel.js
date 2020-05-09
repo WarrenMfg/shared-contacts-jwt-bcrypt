@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 
 const Schema = mongoose.Schema;
 
-export const UserSchema = new Schema({
+const UserSchema = new Schema({
   userName: {
     type: String,
     required: true
@@ -21,6 +21,9 @@ export const UserSchema = new Schema({
     default: Date.now()
   }
 });
+
+export const User = mongoose.model('User', UserSchema);
+
 
 UserSchema.methods.comparePassword = (password, hashPassword) => {
   // password from user is encrypted at this point so bcrypt can compare hash-to-hash
