@@ -11,12 +11,12 @@ export const loginRequired = async (req, res, next) => {
       // see if user is still an active user (not a deleted account)
       const activeUser = await User.findOne({ email: req.user.email, userName: req.user.userName, _id: req.user._id });
 
-      // if activeUser go to route
-      if (activeUser) {
-        next();
-      // otherwise, send reason (e.g. account was deleted but user was not logged out)
-      } else {
+      // if no aciveUser, send reason (e.g. account was deleted but user was not logged out)
+      if (!activeUser) {
         res.status(401).json({ message: 'Unauthorized user!' });
+      // otherwise, activeUser exists, now go to route
+      } else {
+        next();
       }
 
     // otherwise, if JWT is not verified, send reason
@@ -94,13 +94,12 @@ export const deleteUser = async (req, res) => {
     const deletedUser = await User.findOneAndRemove({ email: req.user.email, userName: req.user.userName, _id: req.user._id });
     deletedUser.hashPassword = undefined;
 
-    // if deletedUser was deleted
-    if (deletedUser) {
-      res.status(200).json({ deletedUser });
-
     // if not found (e.g. user was not logged out)
-    } else {
+    if (!deletedUser) {
       res.status(401).json({ message: 'Unauthorized user!' });
+    // otherwise, if user was deleted
+    } else {
+      res.send(deletedUser);
     }
 
   } catch (e) {
